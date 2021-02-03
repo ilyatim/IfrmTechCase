@@ -3,6 +3,7 @@ package com.example.ifrmtechcase
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
+import android.util.Log
 
 class ContactRepo(private val context: Context) {
 
@@ -37,7 +38,6 @@ class ContactRepo(private val context: Context) {
                 }
             }
         }
-
         return contacts
     }
 
