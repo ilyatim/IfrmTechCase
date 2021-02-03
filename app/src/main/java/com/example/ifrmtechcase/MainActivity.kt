@@ -54,12 +54,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
+                viewModel.filter.filter(newText)
+                binding.recyclerview.smoothScrollToPosition(0)
                 return false
             }
 
         })
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onRequestPermissionsResult(
