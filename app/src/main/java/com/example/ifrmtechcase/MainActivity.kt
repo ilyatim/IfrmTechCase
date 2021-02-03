@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         val searchItem: MenuItem = menu.findItem(R.id.action_search)
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE -> viewModel.initContacts()
+            REQUEST_CODE -> {}
         }
     }
 
@@ -81,9 +82,6 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.READ_CONTACTS
                 ), REQUEST_CODE
             )
-        }
-        else {
-            viewModel.initContacts()
         }
     }
     private fun hasPhoneContactsPermission(permission: String): Boolean {

@@ -1,7 +1,6 @@
 package com.example.ifrmtechcase
 
 import android.app.Application
-import android.util.Log
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.lifecycle.AndroidViewModel
@@ -13,13 +12,19 @@ import java.util.*
 class ViewModel(app: Application) : AndroidViewModel(app), Filterable {
 
     private val contactRepo: ContactRepo = ContactRepo(app.baseContext)
+    private var allContacts: List<Contact> = listOf()
     private val _contacts: MutableLiveData<List<Contact>> = MutableLiveData()
 
     val contacts: LiveData<List<Contact>> get() = _contacts
 
-    fun initContacts() {
+    init {
         _contacts.value = contactRepo.getContacts()
+        _contacts.value?.let { allContacts = it }
     }
+
+    /*fun pushToUi() = filteredContacts.postValue(contacts.value?.filter {
+
+    })*/
 
     override fun getFilter(): Filter = filter
 
@@ -34,20 +39,20 @@ class ViewModel(app: Application) : AndroidViewModel(app), Filterable {
             charSeq?.let {
                 when {
                     it.isEmpty() -> {
-                        filteredList.addAll(listAll)
+                        filteredList.addAll(allContacts)
                         lastSize = 0
                     }
                     it.length < lastSize -> {
                         lastSize = charSeq.length
                         filteredList.addAll(getFilledList(
-                            listAll,
+                            allContacts,
                             charSeq
                         ))
                     }
                     else -> {
                         lastSize = charSeq.length
                         filteredList.addAll(getFilledList(
-                            _contacts.value,
+                            _contacts.value ?: allContacts,
                             charSeq
                         ))
                     }
