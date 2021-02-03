@@ -17,5 +17,4 @@ class ViewModel(app: Application) : AndroidViewModel(app) {
     fun initContacts() {
         _contacts.value = contactRepo.getContacts()
     }
-
 }
