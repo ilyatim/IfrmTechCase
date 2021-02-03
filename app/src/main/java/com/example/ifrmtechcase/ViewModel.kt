@@ -24,7 +24,7 @@ class ViewModel(app: Application) : AndroidViewModel(app) {
 
     fun filtering(query: String) = _contacts.postValue(allContacts.filter { contact ->
         if (query.isNotEmpty()) {
-            contains(contact.name, query)
+            contains(contact.name, query) || contains(contact.number, query)
         } else true
     })
 

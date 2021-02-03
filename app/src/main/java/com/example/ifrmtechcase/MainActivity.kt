@@ -7,13 +7,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ifrmtechcase.databinding.ActivityMainBinding
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,9 +41,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
-
         checkContactPermission()
 
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                (binding.recyclerview.layoutManager as LinearLayoutManager)
+                        .scrollToPosition(0)
+            }
+        })
         viewModel.contacts.observe(this, Observer {
             adapter.submitList(it)
         })
@@ -54,7 +66,6 @@ class MainActivity : AppCompatActivity() {
                 newText?.let {
                     viewModel.filtering(newText)
                 }
-                binding.recyclerview.smoothScrollToPosition(0)
                 return false
             }
         })
