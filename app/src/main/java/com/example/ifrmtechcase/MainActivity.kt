@@ -22,12 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: ViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: Adapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = Adapter(
+        val adapter = Adapter(
             LayoutInflater.from(this),
             AdapterDiffUtil()
         )
@@ -50,29 +49,16 @@ class MainActivity : AppCompatActivity() {
         val searchItem: MenuItem = menu.findItem(R.id.action_search)
         val searchView: SearchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
+            override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.filter.filter(newText)
+                newText?.let {
+                    viewModel.filtering(newText)
+                }
                 binding.recyclerview.smoothScrollToPosition(0)
                 return false
             }
-
         })
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CODE -> {}
-        }
     }
 
     private fun checkContactPermission() {
@@ -84,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
     private fun hasPhoneContactsPermission(permission: String): Boolean {
         val hasPermission: Int = ContextCompat.checkSelfPermission(
             applicationContext,
