@@ -11,7 +11,7 @@ class ContactRepo(private val context: Context) {
 
     fun getContacts(): List<Contact> {
 
-        //clearContacts()
+        clearContacts()
 
         val cursor: Cursor? = context.contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -25,11 +25,17 @@ class ContactRepo(private val context: Context) {
             if (cursor.count > 0) {
                 while (cursor.moveToNext()) {
                     val name =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                        cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                        )
                     val number =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                        cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                        )
                     val photoUri =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
+                        cursor.getString(
+                                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
+                        )
                     contacts.add(Contact(
                         name,
                         number,

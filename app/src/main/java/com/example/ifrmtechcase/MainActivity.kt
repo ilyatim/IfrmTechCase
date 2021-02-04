@@ -41,6 +41,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
+        (binding.toolbar
+                .menu
+                .findItem(R.id.action_search)
+                .actionView as SearchView).setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean = false
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        newText?.let {
+                            viewModel.filtering(newText)
+                        }
+                        return false
+                    }
+                })
+
         checkContactPermission()
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -56,23 +69,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    //TODO: handel with no action bar
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        val searchItem: MenuItem = menu.findItem(R.id.action_search)
-        val searchView: SearchView = searchItem.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    viewModel.filtering(newText)
-                }
-                return false
-            }
-        })
-        return super.onCreateOptionsMenu(menu)
-    }
-
     private fun checkContactPermission() {
         if (!hasPhoneContactsPermission(Manifest.permission.READ_CONTACTS)) {
             requestPermissions(
@@ -80,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.READ_CONTACTS
                 ), REQUEST_CODE
             )
-        }
+        } 
     }
 
     private fun hasPhoneContactsPermission(permission: String): Boolean {
