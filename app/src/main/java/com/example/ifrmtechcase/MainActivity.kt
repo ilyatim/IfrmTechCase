@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    //TODO: handel with no action bar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         val searchItem: MenuItem = menu.findItem(R.id.action_search)
