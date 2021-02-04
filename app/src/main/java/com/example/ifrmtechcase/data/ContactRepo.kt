@@ -1,14 +1,21 @@
-package com.example.ifrmtechcase
+package com.example.ifrmtechcase.data
 
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
-import android.util.Log
 
+/**
+ * Class pattern repository
+ * @param context - Interface to global information about an application environment
+ */
 class ContactRepo(private val context: Context) {
 
     private val contacts: MutableList<Contact> = mutableListOf()
 
+    /**
+     * Fun that return contacts
+     * @return list of contact
+     */
     fun getContacts(): List<Contact> {
 
         clearContacts()
